@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kghrestaurant-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kghrestaurant-app
+  template:
+    metadata:
+      labels:
+        app: kghrestaurant-app
+    spec:
+      containers:
+      - name: kghrestaurant-app
+        image: kghrestaurantacr.azurecr.io/kghrestaurant-app:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kghrestaurant-app-service
+spec:
+  selector:
+    app: kghrestaurant-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
